@@ -8,7 +8,7 @@ exports.fetchAllTopics = () => {
   });
 };
 
-exports.fetchArticleById = () => {
+exports.fetchArticleById = (articleId) => {
   console.log('Inside Model');
   const sqlQuery = `SELECT article_id,
     author,
@@ -18,8 +18,8 @@ exports.fetchArticleById = () => {
     created_at,
     votes,
     article_img_url FROM articles
-    WHERE article_id = 1 `;
-  return db.query(sqlQuery).then(({ rows }) => {
+    WHERE article_id = $1 `;
+  return db.query(sqlQuery, [articleId]).then(({ rows }) => {
     return rows;
   });
 };
