@@ -1,5 +1,9 @@
 const express = require('express');
-const { getApi, getTopics } = require('./controllers/app.controller');
+const {
+  getApi,
+  getTopics,
+  getArticleById,
+} = require('./controllers/app.controller');
 const {
   postgresErrorHandler,
   customErrorHandler,
@@ -13,6 +17,8 @@ app.get('/api', getApi);
 //GET /api/topics - List all topics
 app.get('/api/topics', getTopics);
 //GET /api/articles/:article_id - Get article by ID
+app.get('/api/articles/:article_id', getArticleById);
+
 app.use(postgresErrorHandler);
 
 app.use(customErrorHandler);
