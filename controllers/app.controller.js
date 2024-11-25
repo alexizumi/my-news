@@ -1,7 +1,17 @@
-const endpointsJson = require("../endpoints.json");
+const endpointsJson = require('../endpoints.json');
+const { fetchAllTopics } = require('../models/app.model');
 
-function getApi(req, res){
-    res.status(200).send({endpoints: endpointsJson});
-}
+exports.getApi = (req, res) => {
+  res.status(200).send({ endpoints: endpointsJson });
+};
 
-module.exports = getApi;
+exports.getTopics = (req, res, next) => {
+  if (req.query.forceError === 'true') {
+    return next(new Error('Forced server error for testing'));
+  }
+  fetchAllTopics()
+    .then((topics) => {
+      res.status(200).send(topics);
+    })
+    .catch(next);
+};
