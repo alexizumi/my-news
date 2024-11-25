@@ -10,9 +10,9 @@ const app = express();
 
 // GET API - Document all other endpoints available
 app.get('/api', getApi);
-
+//GET /api/topics - List all topics
 app.get('/api/topics', getTopics);
-
+//GET /api/articles/:article_id - Get article by ID
 app.use(postgresErrorHandler);
 
 app.use(customErrorHandler);
