@@ -17,8 +17,9 @@ exports.getTopics = (req, res, next) => {
 };
 exports.getArticleById = (req, res, next) => {
   const articleId = req.params.article_id;
-  console.log(articleId, 'articleId Inside controller');
-  fetchArticleById(articleId).then((articles) => {
-    res.status(200).send(articles);
-  });
+  fetchArticleById(articleId)
+    .then((articles) => {
+      res.status(200).send(articles);
+    })
+    .catch(next);
 };

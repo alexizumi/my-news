@@ -47,7 +47,6 @@ describe('GET /api/articles/:article_id', () => {
       .get('/api/articles/1')
       .expect(200)
       .then(({ body }) => {
-        console.log(body);
         expect(body[0].article_id).toBe(1);
         expect(body[0].title).toBe('Living in the shadow of a great man');
         expect(body[0].topic).toBe('mitch');
@@ -60,4 +59,32 @@ describe('GET /api/articles/:article_id', () => {
         );
       });
   });
+  test('400: should respond with "Bad request" if invalid article provided', () => {
+    return request(app)
+      .get('/api/articles/banana')
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
+      });
+  });
+  test('404: should respond with "Article not found" if article doesnt exist', () => {
+    return request(app)
+      .get('/api/articles/1230')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Article not found');
+      });
+  });
+  // test('400: should respond with "Article ID required" if article ID nor provided', () => {
+  //   return request(app)
+  //     .get('/api/articles/')
+  //     .expect(404)
+  //     .then(({ body }) => {
+  //       expect(body.msg).toBe('Article ID required');
+  //     });
+  // });
+  // Test for:
+  // - Invalid Article ID - 400 "Bad request"
+  // - Article not found - 404 "Article not found"
+  // - Article ID is null - 400 "Article ID required"
 });

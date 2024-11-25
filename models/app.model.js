@@ -9,7 +9,6 @@ exports.fetchAllTopics = () => {
 };
 
 exports.fetchArticleById = (articleId) => {
-  console.log('Inside Model');
   const sqlQuery = `SELECT article_id,
     author,
     title,
@@ -20,6 +19,9 @@ exports.fetchArticleById = (articleId) => {
     article_img_url FROM articles
     WHERE article_id = $1 `;
   return db.query(sqlQuery, [articleId]).then(({ rows }) => {
+    if (rows.length === 0) {
+      return Promise.reject({ status: 404, msg: 'Article not found' });
+    }
     return rows;
   });
 };
