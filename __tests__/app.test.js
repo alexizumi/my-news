@@ -36,8 +36,52 @@ describe('GET /api/topics', () => {
       .get('/api/topics?forceError=true')
       .expect(500)
       .then(({ body }) => {
-        console.log(body);
         expect(body.msg).toBe('Internal Server Error');
       });
   });
+});
+
+describe('GET /api/articles/:article_id', () => {
+  test('200: Responds with requested article', () => {
+    return request(app)
+      .get('/api/articles/1')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body[0].article_id).toBe(1);
+        expect(body[0].title).toBe('Living in the shadow of a great man');
+        expect(body[0].topic).toBe('mitch');
+        expect(body[0].author).toBe('butter_bridge');
+        expect(body[0].body).toBe('I find this existence challenging');
+        expect(body[0].created_at).toBe('2020-07-09T20:11:00.000Z');
+        expect(body[0].votes).toBe(100);
+        expect(body[0].article_img_url).toBe(
+          'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+        );
+      });
+  });
+  test('400: should respond with "Bad request" if invalid article provided', () => {
+    return request(app)
+      .get('/api/articles/banana')
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
+      });
+  });
+  test('404: should respond with "Article not found" if article doesnt exist', () => {
+    return request(app)
+      .get('/api/articles/1230')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Article not found');
+      });
+  });
+  // - Article ID is null - 400 "Article ID required" NOT SURE IF NEEDED
+  // test('400: should respond with "Article ID required" if article ID nor provided', () => {
+  //   return request(app)
+  //     .get('/api/articles/')
+  //     .expect(404)
+  //     .then(({ body }) => {
+  //       expect(body.msg).toBe('Article ID required');
+  //     });
+  // });
 });
