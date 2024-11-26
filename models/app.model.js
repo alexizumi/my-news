@@ -44,9 +44,12 @@ exports.fetchAllArticles = () => {
     return rows;
   });
 };
-exports.fetchCommentsById = (article_id) => {
-  const sqlQuery = `SELECT * comments `;
-  return db.query(sqlQuery).then(({ rows }) => {
+exports.fetchCommentsByArticle = (article_id) => {
+  const sqlQuery = `
+  SELECT * FROM comments 
+  WHERE article_id = $1
+  ORDER BY comments.created_at DESC;`;
+  return db.query(sqlQuery, [article_id]).then(({ rows }) => {
     return rows;
   });
 };
