@@ -2,7 +2,6 @@ const db = require('../db/connection');
 
 exports.fetchAllTopics = () => {
   const sqlQuery = `SELECT * FROM topics`;
-
   return db.query(sqlQuery).then(({ rows }) => {
     return rows;
   });
@@ -42,7 +41,6 @@ exports.fetchAllArticles = () => {
     ORDER BY articles.created_at DESC; `;
 
   return db.query(sqlQuery).then(({ rows }) => {
-    console.log(rows, 'rows inside model');
     return rows;
   });
 };

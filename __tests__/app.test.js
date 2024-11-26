@@ -86,7 +86,7 @@ describe('GET /api/articles/:article_id', () => {
   // });
 });
 describe('GET /api/articles', () => {
-  test.only('200: Responds with all articles in database', () => {
+  test('200: Responds with all articles in database', () => {
     return request(app)
       .get('/api/articles')
       .expect(200)

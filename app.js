@@ -13,6 +13,9 @@ const {
 
 const app = express();
 
+app.listen(9090, () => {
+  console.log('Server is running on port 9090...');
+});
 // GET API - Document all other endpoints available
 app.get('/api', getApi);
 //GET /api/topics - List all topics
