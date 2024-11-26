@@ -75,6 +75,7 @@ describe('GET /api/articles/:article_id', () => {
         expect(body.msg).toBe('Article not found');
       });
   });
+  // - Article ID is null - 400 "Article ID required" NOT SURE IF NEEDED
   // test('400: should respond with "Article ID required" if article ID nor provided', () => {
   //   return request(app)
   //     .get('/api/articles/')
@@ -83,8 +84,4 @@ describe('GET /api/articles/:article_id', () => {
   //       expect(body.msg).toBe('Article ID required');
   //     });
   // });
-  // Test for:
-  // - Invalid Article ID - 400 "Bad request"
-  // - Article not found - 404 "Article not found"
-  // - Article ID is null - 400 "Article ID required"
 });
