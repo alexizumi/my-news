@@ -1,5 +1,9 @@
 const endpointsJson = require('../endpoints.json');
-const { fetchAllTopics, fetchArticleById } = require('../models/app.model');
+const {
+  fetchAllTopics,
+  fetchArticleById,
+  fetchAllArticles,
+} = require('../models/app.model');
 
 exports.getApi = (req, res) => {
   res.status(200).send({ endpoints: endpointsJson });
@@ -18,6 +22,14 @@ exports.getTopics = (req, res, next) => {
 exports.getArticleById = (req, res, next) => {
   const articleId = req.params.article_id;
   fetchArticleById(articleId)
+    .then((articles) => {
+      res.status(200).send(articles);
+    })
+    .catch(next);
+};
+exports.getArticles = (req, res, next) => {
+  //   console.log('Inside controller');
+  fetchAllArticles()
     .then((articles) => {
       res.status(200).send(articles);
     })
