@@ -109,7 +109,7 @@ describe('GET /api/articles', () => {
   });
 });
 describe('GET /api/articles/:article_id/comments', () => {
-  test.only('200: should respond with all coments related to article', () => {
+  test('200: should respond with all coments related to article', () => {
     return request(app)
       .get('/api/articles/1/comments')
       .expect(200)
@@ -127,4 +127,23 @@ describe('GET /api/articles/:article_id/comments', () => {
         });
       });
   });
+  // Test for:
+  // article id inexistent
+  // article id in wrong format
+});
+test('400: should respond with "Bad request" if invalid article provided', () => {
+  return request(app)
+    .get('/api/articles/banana/comments')
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe('Bad request');
+    });
+});
+test('404: should respond with "Article not found" if article doesnt exist', () => {
+  return request(app)
+    .get('/api/articles/1230/comments')
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe('Article not found');
+    });
 });

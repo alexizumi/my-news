@@ -50,6 +50,9 @@ exports.fetchCommentsByArticle = (article_id) => {
   WHERE article_id = $1
   ORDER BY comments.created_at DESC;`;
   return db.query(sqlQuery, [article_id]).then(({ rows }) => {
+    if (rows.length === 0) {
+      return Promise.reject({ status: 404, msg: 'Article not found' });
+    }
     return rows;
   });
 };
