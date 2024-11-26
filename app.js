@@ -4,6 +4,7 @@ const {
   getTopics,
   getArticleById,
   getArticles,
+  getCommentsByArticle,
 } = require('./controllers/app.controller');
 const {
   postgresErrorHandler,
@@ -12,10 +13,10 @@ const {
 } = require('./errors/app.errors');
 
 const app = express();
-
+/*
 app.listen(9090, () => {
   console.log('Server is running on port 9090...');
-});
+});*/
 // GET API - Document all other endpoints available
 app.get('/api', getApi);
 //GET /api/topics - List all topics
@@ -24,6 +25,8 @@ app.get('/api/topics', getTopics);
 app.get('/api/articles/:article_id', getArticleById);
 //GET /api/articles - Get all articles
 app.get('/api/articles', getArticles);
+// Get comments by article
+app.get('/api/articles/:article_id/comments', getCommentsByArticle);
 
 app.use(postgresErrorHandler);
 

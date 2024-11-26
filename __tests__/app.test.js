@@ -91,7 +91,7 @@ describe('GET /api/articles', () => {
       .get('/api/articles')
       .expect(200)
       .then(({ body }) => {
-        const { articles } = body;
+        //const { articles } = body;
         expect(Array.isArray(body)).toBe(true);
         expect(body).toBeSortedBy('created_at', { descending: true });
         body.forEach((article) => {
@@ -107,4 +107,43 @@ describe('GET /api/articles', () => {
         });
       });
   });
+});
+describe('GET /api/articles/:article_id/comments', () => {
+  test('200: should respond with all coments related to article', () => {
+    return request(app)
+      .get('/api/articles/1/comments')
+      .expect(200)
+      .then(({ body }) => {
+        //const { comments } = body;
+        expect(Array.isArray(body)).toBe(true);
+        expect(body).toBeSortedBy('created_at', { descending: true });
+        body.forEach((comment) => {
+          expect(comment).toHaveProperty('article_id', expect.any(Number));
+          expect(comment).toHaveProperty('votes', expect.any(Number));
+          expect(comment).toHaveProperty('created_at', expect.any(String));
+          expect(comment).toHaveProperty('author', expect.any(String));
+          expect(comment).toHaveProperty('body', expect.any(String));
+          expect(comment).toHaveProperty('article_id', expect.any(Number));
+        });
+      });
+  });
+  // Test for:
+  // article id inexistent
+  // article id in wrong format
+});
+test('400: should respond with "Bad request" if invalid article provided', () => {
+  return request(app)
+    .get('/api/articles/banana/comments')
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe('Bad request');
+    });
+});
+test('404: should respond with "Article not found" if article doesnt exist', () => {
+  return request(app)
+    .get('/api/articles/1230/comments')
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe('Article not found');
+    });
 });

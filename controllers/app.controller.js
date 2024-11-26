@@ -3,6 +3,7 @@ const {
   fetchAllTopics,
   fetchArticleById,
   fetchAllArticles,
+  fetchCommentsByArticle,
 } = require('../models/app.model');
 
 exports.getApi = (req, res) => {
@@ -28,10 +29,17 @@ exports.getArticleById = (req, res, next) => {
     .catch(next);
 };
 exports.getArticles = (req, res, next) => {
-  //   console.log('Inside controller');
   fetchAllArticles()
     .then((articles) => {
       res.status(200).send(articles);
+    })
+    .catch(next);
+};
+exports.getCommentsByArticle = (req, res, next) => {
+  const article_id = req.params.article_id;
+  fetchCommentsByArticle(article_id)
+    .then((comments) => {
+      res.status(200).send(comments);
     })
     .catch(next);
 };
