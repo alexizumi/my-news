@@ -58,5 +58,15 @@
         }
       ]
     }
+  },
+  "PATCH /api/:article_id": {
+    "description": "Edit an article by article_id",
+    "exampleResponse": {
+      "comment": [
+        {
+          "body": "Testing comments."
+        }
+      ]
+    }
   }
 }

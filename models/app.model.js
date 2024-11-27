@@ -71,3 +71,19 @@ exports.insertComment = (article_id, username, commentBody) => {
       return rows;
     });
 };
+exports.editArticle = (article_id, inc_votes) => {
+  console.log(article_id, inc_votes, '<<< article_id, inc_votes in model');
+  return db
+    .query(
+      `
+    UPDATE articles
+    SET votes = votes + $2
+    WHERE article_id = $1
+    RETURNING *`,
+      [article_id, inc_votes]
+    )
+    .then(({ rows }) => {
+      console.log(rows, '<<< rows in model');
+      return rows;
+    });
+};

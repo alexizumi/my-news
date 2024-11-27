@@ -220,3 +220,46 @@ describe('POST /api/articles/:article_id/comments', () => {
       });
   });
 });
+describe.only('PATCH /api/articles/:article_id', () => {
+  test('200: should update article vote in correct article ID', () => {
+    const updateVote = { inc_votes: 1 };
+    return request(app)
+      .patch('/api/articles/3')
+      .send(updateVote)
+      .expect(200)
+      .then(({ body }) => {
+        const { article } = body;
+        console.log(article, '<<< article in test');
+        console.log(body, '<<< body in test');
+        expect(article[0]).toHaveProperty('article_id', 3);
+        expect(article[0]).toHaveProperty(
+          'title',
+          'Eight pug gifs that remind me of mitch'
+        );
+        expect(article[0]).toHaveProperty('votes', 1);
+        expect(article[0]).toHaveProperty('created_at', expect.any(String));
+        expect(article[0]).toHaveProperty('author', 'icellusedkars');
+        expect(article[0]).toHaveProperty('body', 'some gifs');
+      });
+  });
+  test('400: should respond with "Bad request" if invalid article provided', () => {
+    const updateVote = { inc_votes: 1 };
+    return request(app)
+      .patch('/api/articles/banana')
+      .send(updateVote)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
+      });
+  });
+  test('404: should respond with "Article not found" if article doesnt exist', () => {
+    const updateVote = { inc_votes: 1 };
+    return request(app)
+      .get('/api/articles/1230')
+      .send(updateVote)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Article not found');
+      });
+  });
+});

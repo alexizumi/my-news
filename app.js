@@ -6,6 +6,7 @@ const {
   getArticles,
   getCommentsByArticle,
   postComment,
+  patchArticleById,
 } = require('./controllers/app.controller');
 const {
   postgresErrorHandler,
@@ -15,10 +16,10 @@ const {
 
 const app = express();
 app.use(express.json());
-/*
-app.listen(9090, () => {
-  console.log('Server is running on port 9090...');
-});*/
+
+// app.listen(9090, () => {
+//   console.log('Server is running on port 9090...');
+// });
 // GET API - Document all other endpoints available
 app.get('/api', getApi);
 //GET /api/topics - List all topics
@@ -31,6 +32,8 @@ app.get('/api/articles', getArticles);
 app.get('/api/articles/:article_id/comments', getCommentsByArticle);
 // POST comment in article
 app.post('/api/articles/:article_id/comments', postComment);
+//PATCH /api/articles/:article_id - Update article votes
+app.patch('/api/articles/:article_id', patchArticleById);
 
 app.use(postgresErrorHandler);
 
