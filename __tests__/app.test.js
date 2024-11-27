@@ -167,4 +167,56 @@ describe('POST /api/articles/:article_id/comments', () => {
         );
       });
   });
+  test('400: should respond with "Bad request" if invalid article provided', () => {
+    const newComment = {
+      username: 'butter_bridge',
+      body: 'This is a sample comment created by butter_bridge.',
+    };
+    return request(app)
+      .post('/api/articles/banana/comments')
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
+      });
+  });
+  test('400: should respond with "Bad request" if article doesnt exist', () => {
+    const newComment = {
+      username: 'butter_bridge',
+      body: 'This is a sample comment created by butter_bridge.',
+    };
+    return request(app)
+      .post('/api/articles/1230/comments')
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
+      });
+  });
+  test('400: should respond with "Missing argument" if empty comment provided', () => {
+    const newComment = {
+      username: 'butter_bridge',
+      body: '',
+    };
+    return request(app)
+      .post('/api/articles/2/comments')
+      .send(newComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Missing argument');
+      });
+  });
+  test('400: should respond with "Missing argument" if empty username provided', () => {
+    const newComment = {
+      username: 'butter_bridge',
+      body: '',
+    };
+    return request(app)
+      .post('/api/articles/2/comments')
+      .send(newComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Missing argument');
+      });
+  });
 });

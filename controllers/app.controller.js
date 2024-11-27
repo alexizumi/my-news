@@ -47,8 +47,12 @@ exports.getCommentsByArticle = (req, res, next) => {
 exports.postComment = (req, res, next) => {
   const { article_id } = req.params;
   const { username, body } = req.body;
+  console.log(body, '<<< body in controller');
   insertComment(article_id, username, body)
     .then((comment) => {
+      if (username === '' || body === '') {
+        return Promise.reject({ status: 404, msg: 'Missing argument' });
+      }
       res.status(201).send({ comment });
     })
     .catch(next);
