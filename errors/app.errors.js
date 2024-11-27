@@ -9,7 +9,6 @@ exports.postgresErrorHandler = (err, req, res, next) => {
 
 exports.customErrorHandler = (err, req, res, next) => {
   if (err.status && err.msg) {
-    console.log(err, '<<< Err code');
     res.status(err.status).send({ msg: err.msg });
   } else {
     next(err);

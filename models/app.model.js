@@ -66,7 +66,6 @@ exports.insertComment = (article_id, username, commentBody) => {
     .query(sqlQuery, [article_id, username, commentBody])
     .then(({ rows }) => {
       if (rows.length === 0) {
-        console.log(rows, '<<< rows in model');
         return Promise.reject({ status: 404, msg: 'Article not found' });
       }
       return rows;
