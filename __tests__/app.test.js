@@ -4,6 +4,7 @@ const request = require('supertest');
 const app = require('../app');
 const seed = require('../db/seeds/seed');
 const data = require('../db/data/test-data/index');
+const comments = require('../db/data/test-data/comments');
 
 beforeEach(() => seed(data));
 afterAll(() => db.end());
@@ -268,6 +269,35 @@ describe('PATCH /api/articles/:article_id', () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe('Bad request');
+      });
+  });
+});
+describe('DELETE /api/comments/:comment_id', () => {
+  test('204: should delete the given comment by comment_id', () => {
+    return request(app)
+      .delete('/api/comments/3')
+      .expect(204)
+      .then(() => {
+        return db.query('SELECT * FROM comments WHERE comment_id = 3');
+      })
+      .then(({ rows }) => {
+        expect(rows).toHaveLength(0);
+      });
+  });
+  test("404: should return an error if comment_id doesn't exist", () => {
+    return request(app)
+      .delete('/api/comments/9999')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Comment not found');
+      });
+  });
+  test('400: should return an error if comment_id is invalid', () => {
+    return request(app)
+      .delete('/api/comments/invalid')
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Invalid comment_id');
       });
   });
 });
