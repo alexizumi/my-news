@@ -72,7 +72,6 @@ exports.insertComment = (article_id, username, commentBody) => {
     });
 };
 exports.editArticle = (article_id, inc_votes) => {
-  console.log(article_id, inc_votes, '<<< article_id, inc_votes in model');
   return db
     .query(
       `
@@ -83,7 +82,9 @@ exports.editArticle = (article_id, inc_votes) => {
       [article_id, inc_votes]
     )
     .then(({ rows }) => {
-      console.log(rows, '<<< rows in model');
+      if (rows.length === 0) {
+        return Promise.reject({ status: 404, msg: 'Article not found' });
+      }
       return rows;
     });
 };

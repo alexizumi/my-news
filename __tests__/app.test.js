@@ -220,7 +220,7 @@ describe('POST /api/articles/:article_id/comments', () => {
       });
   });
 });
-describe.only('PATCH /api/articles/:article_id', () => {
+describe('PATCH /api/articles/:article_id', () => {
   test('200: should update article vote in correct article ID', () => {
     const updateVote = { inc_votes: 1 };
     return request(app)
@@ -255,11 +255,21 @@ describe.only('PATCH /api/articles/:article_id', () => {
   test('404: should respond with "Article not found" if article doesnt exist', () => {
     const updateVote = { inc_votes: 1 };
     return request(app)
-      .get('/api/articles/1230')
+      .patch('/api/articles/1230')
       .send(updateVote)
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe('Article not found');
+      });
+  });
+  test('400: should respond with "Bad request" increment value is not a number', () => {
+    const updateVote = { inc_votes: 'one' };
+    return request(app)
+      .patch('/api/articles/3')
+      .send(updateVote)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
       });
   });
 });
