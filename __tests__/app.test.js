@@ -229,8 +229,6 @@ describe('PATCH /api/articles/:article_id', () => {
       .expect(200)
       .then(({ body }) => {
         const { article } = body;
-        console.log(article, '<<< article in test');
-        console.log(body, '<<< body in test');
         expect(article[0]).toHaveProperty('article_id', 3);
         expect(article[0]).toHaveProperty(
           'title',
