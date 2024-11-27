@@ -96,3 +96,4 @@ exports.removeComment = (comment_id) => {
   `;
   return db.query(sqlQuery, [comment_id]).then(({ rows }) => rows);
 };
+exports.fetchAllUsers = () => {};

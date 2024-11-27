@@ -84,3 +84,4 @@ exports.deleteComment = (req, res, next) => {
     })
     .catch(next);
 };
+exports.getUsers = (req, res, next) => {};
