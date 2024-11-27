@@ -5,6 +5,7 @@ const {
   fetchAllArticles,
   fetchCommentsByArticle,
   insertComment,
+  editArticle,
 } = require('../models/app.model');
 
 exports.getApi = (req, res) => {
@@ -53,6 +54,18 @@ exports.postComment = (req, res, next) => {
         return Promise.reject({ status: 404, msg: 'Missing argument' });
       }
       res.status(201).send({ comment });
+    })
+    .catch(next);
+};
+exports.patchArticleById = (req, res, next) => {
+  const { article_id } = req.params;
+  const { inc_votes } = req.body;
+  editArticle(article_id, inc_votes)
+    .then((article) => {
+      if (typeof inc_votes != 'number') {
+        return Promise.reject({ status: 404, msg: 'Bad request' });
+      }
+      res.status(200).send({ article });
     })
     .catch(next);
 };
