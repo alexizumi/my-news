@@ -6,6 +6,7 @@ const {
   fetchCommentsByArticle,
   insertComment,
   editArticle,
+  removeComment,
 } = require('../models/app.model');
 
 exports.getApi = (req, res) => {
@@ -66,6 +67,20 @@ exports.patchArticleById = (req, res, next) => {
         return Promise.reject({ status: 404, msg: 'Bad request' });
       }
       res.status(200).send({ article });
+    })
+    .catch(next);
+};
+exports.deleteComment = (req, res, next) => {
+  const { comment_id } = req.params;
+  if (isNaN(comment_id)) {
+    return next({ status: 400, msg: 'Invalid comment_id' });
+  }
+  removeComment(comment_id)
+    .then((comment) => {
+      if (!comment.length) {
+        return Promise.reject({ status: 404, msg: 'Comment not found' });
+      }
+      res.status(204).send();
     })
     .catch(next);
 };

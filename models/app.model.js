@@ -88,3 +88,11 @@ exports.editArticle = (article_id, inc_votes) => {
       return rows;
     });
 };
+exports.removeComment = (comment_id) => {
+  const sqlQuery = `
+  DELETE FROM comments
+  WHERE comment_id = $1
+  RETURNING *;
+  `;
+  return db.query(sqlQuery, [comment_id]).then(({ rows }) => rows);
+};
