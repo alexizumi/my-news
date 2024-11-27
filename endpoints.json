@@ -25,5 +25,38 @@
         }
       ]
     }
+  },
+  "GET /api/:article_id/comments": {
+    "description": "serves an array of all comments in an article",
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment_id": 21,
+          "votes": 16,
+          "created_at": 1586179020000,
+          "author": "butter_bridge",
+          "body": "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+          "article_id": 9
+        },
+        {
+          "comment_id": 23,
+          "votes": 5,
+          "created_at": 1583025180000,
+          "author": "icellusedkars",
+          "body": "Replacing the quiet elegance of the dark suit and tie with the casual indifference of these muted earth tones is a form of fashion suicide, but, uh, call me crazy — onyou it works.",
+          "article_id": 15
+        }
+      ]
+    }
+  },
+  "POST /api/:article_id/comments": {
+    "description": "add a comment to an article",
+    "exampleResponse": {
+      "comment": [
+        {
+          "body": "Testing comments."
+        }
+      ]
+    }
   }
 }

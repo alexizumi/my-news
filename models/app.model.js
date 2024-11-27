@@ -56,3 +56,18 @@ exports.fetchCommentsByArticle = (article_id) => {
     return rows;
   });
 };
+exports.insertComment = (article_id, username, commentBody) => {
+  const sqlQuery = `
+  INSERT INTO comments (article_id, author, body)
+  VALUES ($1, $2, $3)
+  RETURNING *
+  `;
+  return db
+    .query(sqlQuery, [article_id, username, commentBody])
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({ status: 404, msg: 'Article not found' });
+      }
+      return rows;
+    });
+};

@@ -91,7 +91,6 @@ describe('GET /api/articles', () => {
       .get('/api/articles')
       .expect(200)
       .then(({ body }) => {
-        //const { articles } = body;
         expect(Array.isArray(body)).toBe(true);
         expect(body).toBeSortedBy('created_at', { descending: true });
         body.forEach((article) => {
@@ -114,7 +113,6 @@ describe('GET /api/articles/:article_id/comments', () => {
       .get('/api/articles/1/comments')
       .expect(200)
       .then(({ body }) => {
-        //const { comments } = body;
         expect(Array.isArray(body)).toBe(true);
         expect(body).toBeSortedBy('created_at', { descending: true });
         body.forEach((comment) => {
@@ -146,4 +144,79 @@ test('404: should respond with "Article not found" if article doesnt exist', () 
     .then(({ body }) => {
       expect(body.msg).toBe('Article not found');
     });
+});
+describe('POST /api/articles/:article_id/comments', () => {
+  test('201: should insert comment in correct article', () => {
+    const newComment = {
+      username: 'butter_bridge',
+      body: 'This is a sample comment created by butter_bridge.',
+    };
+    return request(app)
+      .post('/api/articles/2/comments')
+      .send(newComment)
+      .expect(201)
+      .then(({ body }) => {
+        const { comment } = body;
+        expect(comment[0]).toHaveProperty('article_id', 2);
+        expect(comment[0]).toHaveProperty('votes', 0);
+        expect(comment[0]).toHaveProperty('created_at', expect.any(String));
+        expect(comment[0]).toHaveProperty('author', 'butter_bridge');
+        expect(comment[0]).toHaveProperty(
+          'body',
+          'This is a sample comment created by butter_bridge.'
+        );
+      });
+  });
+  test('400: should respond with "Bad request" if invalid article provided', () => {
+    const newComment = {
+      username: 'butter_bridge',
+      body: 'This is a sample comment created by butter_bridge.',
+    };
+    return request(app)
+      .post('/api/articles/banana/comments')
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
+      });
+  });
+  test('400: should respond with "Bad request" if article doesnt exist', () => {
+    const newComment = {
+      username: 'butter_bridge',
+      body: 'This is a sample comment created by butter_bridge.',
+    };
+    return request(app)
+      .post('/api/articles/1230/comments')
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
+      });
+  });
+  test('400: should respond with "Missing argument" if empty comment provided', () => {
+    const newComment = {
+      username: 'butter_bridge',
+      body: '',
+    };
+    return request(app)
+      .post('/api/articles/2/comments')
+      .send(newComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Missing argument');
+      });
+  });
+  test('400: should respond with "Missing argument" if empty username provided', () => {
+    const newComment = {
+      username: 'butter_bridge',
+      body: '',
+    };
+    return request(app)
+      .post('/api/articles/2/comments')
+      .send(newComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Missing argument');
+      });
+  });
 });

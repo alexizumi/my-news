@@ -4,6 +4,7 @@ const {
   fetchArticleById,
   fetchAllArticles,
   fetchCommentsByArticle,
+  insertComment,
 } = require('../models/app.model');
 
 exports.getApi = (req, res) => {
@@ -40,6 +41,18 @@ exports.getCommentsByArticle = (req, res, next) => {
   fetchCommentsByArticle(article_id)
     .then((comments) => {
       res.status(200).send(comments);
+    })
+    .catch(next);
+};
+exports.postComment = (req, res, next) => {
+  const { article_id } = req.params;
+  const { username, body } = req.body;
+  insertComment(article_id, username, body)
+    .then((comment) => {
+      if (username === '' || body === '') {
+        return Promise.reject({ status: 404, msg: 'Missing argument' });
+      }
+      res.status(201).send({ comment });
     })
     .catch(next);
 };
