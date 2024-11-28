@@ -85,7 +85,8 @@ exports.editArticle = (article_id, inc_votes) => {
       if (rows.length === 0) {
         return Promise.reject({ status: 404, msg: 'Article not found' });
       }
-      return rows;
+      const article = rows[0];
+      return article;
     });
 };
 exports.removeComment = (comment_id) => {
