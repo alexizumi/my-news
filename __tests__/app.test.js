@@ -41,7 +41,6 @@ describe('GET /api/topics', () => {
       });
   });
 });
-
 describe('GET /api/articles/:article_id', () => {
   test('200: Responds with requested article', () => {
     return request(app)
@@ -76,15 +75,6 @@ describe('GET /api/articles/:article_id', () => {
         expect(body.msg).toBe('Article not found');
       });
   });
-  // - Article ID is null - 400 "Article ID required" NOT SURE IF NEEDED
-  // test('400: should respond with "Article ID required" if article ID nor provided', () => {
-  //   return request(app)
-  //     .get('/api/articles/')
-  //     .expect(404)
-  //     .then(({ body }) => {
-  //       expect(body.msg).toBe('Article ID required');
-  //     });
-  // });
 });
 describe('GET /api/articles', () => {
   test('200: Responds with all articles in database', () => {
@@ -107,6 +97,31 @@ describe('GET /api/articles', () => {
         });
       });
   });
+  test('200: Response is sorted by the article_id in ascending order', () => {
+    return request(app)
+      .get('/api/articles?sort_by=article_id&order=ASC')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toHaveLength(13);
+        expect(body).toBeSortedBy('article_id', { ascending: true });
+      });
+  });
+  test('400: Response error Bad request if invalid argument passed', () => {
+    return request(app)
+      .get('/api/articles?sort_by=banana&order=ASC')
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
+      });
+  });
+  test('400: Response error Bad request if invalid argument passed', () => {
+    return request(app)
+      .get('/api/articles?sort_by=article_id&order=invalid')
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
+      });
+  });
 });
 describe('GET /api/articles/:article_id/comments', () => {
   test('200: should respond with all coments related to article', () => {
@@ -126,25 +141,22 @@ describe('GET /api/articles/:article_id/comments', () => {
         });
       });
   });
-  // Test for:
-  // article id inexistent
-  // article id in wrong format
-});
-test('400: should respond with "Bad request" if invalid article provided', () => {
-  return request(app)
-    .get('/api/articles/banana/comments')
-    .expect(400)
-    .then(({ body }) => {
-      expect(body.msg).toBe('Bad request');
-    });
-});
-test('404: should respond with "Article not found" if article doesnt exist', () => {
-  return request(app)
-    .get('/api/articles/1230/comments')
-    .expect(404)
-    .then(({ body }) => {
-      expect(body.msg).toBe('Article not found');
-    });
+  test('400: should respond with "Bad request" if invalid article provided', () => {
+    return request(app)
+      .get('/api/articles/banana/comments')
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
+      });
+  });
+  test('404: should respond with "Article not found" if article doesnt exist', () => {
+    return request(app)
+      .get('/api/articles/1230/comments')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Article not found');
+      });
+  });
 });
 describe('POST /api/articles/:article_id/comments', () => {
   test('201: should insert comment in correct article', () => {
@@ -301,7 +313,6 @@ describe('DELETE /api/comments/:comment_id', () => {
       });
   });
 });
-
 describe('GET /api/users', () => {
   test('200: should return all users', () => {
     return request(app)

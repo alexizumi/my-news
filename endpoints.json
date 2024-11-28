@@ -11,7 +11,7 @@
   },
   "GET /api/articles": {
     "description": "serves an array of all articles",
-    "queries": ["author", "topic", "sort_by", "order"],
+    "queries": ["sort_by", "order"],
     "exampleResponse": {
       "articles": [
         {
@@ -91,6 +91,8 @@
           "avatar_url": "https://gravatar.com/avatar/bad36ade8d9e1c77c5f4f8ff324f76fd?s=400&d=robohash&r=x"
         }
       ]
+    }
+  },
   "DELETE /api/comments/:comment_id": {
     "description": "Delete the given comment by comment_id",
     "exampleResponse": {
