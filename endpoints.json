@@ -26,7 +26,7 @@
       ]
     }
   },
-  "GET /api/:article_id/comments": {
+  "GET /api/articles/:article_id/comments": {
     "description": "serves an array of all comments in an article",
     "exampleResponse": {
       "comments": [
@@ -49,24 +49,41 @@
       ]
     }
   },
-  "POST /api/:article_id/comments": {
+  "POST /api/articles/:article_id/comments": {
     "description": "add a comment to an article",
     "exampleResponse": {
       "comment": [
         {
-          "body": "Testing comments."
+          "comment_id": 308,
+          "body": "This is a sample comment created by grumpy19.",
+          "article_id": 32,
+          "author": "grumpy19",
+          "votes": 0,
+          "created_at": "2024-11-27T14:57:09.337Z"
         }
       ]
     }
   },
-  "PATCH /api/:article_id": {
-    "description": "Edit an article by article_id",
+  "PATCH /api/articles/:article_id": {
+    "description": "Update an article vote by article_id",
     "exampleResponse": {
-      "comment": [
+      "article": [
         {
-          "body": "Testing comments."
+          "title": "Seafood substitutions are increasing",
+          "topic": "cooking",
+          "author": "weegembump",
+          "body": "Text from the article..",
+          "created_at": "2018-05-30T15:59:13.341Z",
+          "votes": 1,
+          "comment_count": 6
         }
       ]
+    }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "Delete the given comment by comment_id",
+    "exampleResponse": {
+      "comment": [{}]
     }
   }
 }
