@@ -96,4 +96,11 @@ exports.removeComment = (comment_id) => {
   `;
   return db.query(sqlQuery, [comment_id]).then(({ rows }) => rows);
 };
-exports.fetchAllUsers = () => {};
+exports.fetchAllUsers = () => {
+  const sqlQuery = `
+  SELECT * FROM users;
+  `;
+  return db.query(sqlQuery).then(({ rows }) => {
+    return rows;
+  });
+};

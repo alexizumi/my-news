@@ -301,3 +301,19 @@ describe('DELETE /api/comments/:comment_id', () => {
       });
   });
 });
+
+describe('GET /api/users', () => {
+  test.only('200: should return all users', () => {
+    return request(app)
+      .get('/api/users')
+      .expect(200)
+      .then(({ text }) => {
+        const users = JSON.parse(text);
+        users.forEach((user) => {
+          expect(user).toHaveProperty('username', expect.any(String));
+          expect(user).toHaveProperty('name', expect.any(String));
+          expect(user).toHaveProperty('avatar_url', expect.any(String));
+        });
+      });
+  });
+});
