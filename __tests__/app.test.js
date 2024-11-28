@@ -230,15 +230,15 @@ describe('PATCH /api/articles/:article_id', () => {
       .expect(200)
       .then(({ body }) => {
         const { article } = body;
-        expect(article[0]).toHaveProperty('article_id', 3);
-        expect(article[0]).toHaveProperty(
+        expect(article).toHaveProperty('article_id', 3);
+        expect(article).toHaveProperty(
           'title',
           'Eight pug gifs that remind me of mitch'
         );
-        expect(article[0]).toHaveProperty('votes', 1);
-        expect(article[0]).toHaveProperty('created_at', expect.any(String));
-        expect(article[0]).toHaveProperty('author', 'icellusedkars');
-        expect(article[0]).toHaveProperty('body', 'some gifs');
+        expect(article).toHaveProperty('votes', 1);
+        expect(article).toHaveProperty('created_at', expect.any(String));
+        expect(article).toHaveProperty('author', 'icellusedkars');
+        expect(article).toHaveProperty('body', 'some gifs');
       });
   });
   test('400: should respond with "Bad request" if invalid article provided', () => {
@@ -298,6 +298,22 @@ describe('DELETE /api/comments/:comment_id', () => {
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe('Invalid comment_id');
+      });
+  });
+});
+
+describe('GET /api/users', () => {
+  test('200: should return all users', () => {
+    return request(app)
+      .get('/api/users')
+      .expect(200)
+      .then(({ text }) => {
+        const users = JSON.parse(text);
+        users.forEach((user) => {
+          expect(user).toHaveProperty('username', expect.any(String));
+          expect(user).toHaveProperty('name', expect.any(String));
+          expect(user).toHaveProperty('avatar_url', expect.any(String));
+        });
       });
   });
 });

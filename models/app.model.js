@@ -85,7 +85,8 @@ exports.editArticle = (article_id, inc_votes) => {
       if (rows.length === 0) {
         return Promise.reject({ status: 404, msg: 'Article not found' });
       }
-      return rows;
+      const article = rows[0];
+      return article;
     });
 };
 exports.removeComment = (comment_id) => {
@@ -95,4 +96,12 @@ exports.removeComment = (comment_id) => {
   RETURNING *;
   `;
   return db.query(sqlQuery, [comment_id]).then(({ rows }) => rows);
+};
+exports.fetchAllUsers = () => {
+  const sqlQuery = `
+  SELECT * FROM users;
+  `;
+  return db.query(sqlQuery).then(({ rows }) => {
+    return rows;
+  });
 };

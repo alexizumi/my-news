@@ -7,6 +7,7 @@ const {
   insertComment,
   editArticle,
   removeComment,
+  fetchAllUsers,
 } = require('../models/app.model');
 
 exports.getApi = (req, res) => {
@@ -81,6 +82,13 @@ exports.deleteComment = (req, res, next) => {
         return Promise.reject({ status: 404, msg: 'Comment not found' });
       }
       res.status(204).send();
+    })
+    .catch(next);
+};
+exports.getUsers = (req, res, next) => {
+  fetchAllUsers()
+    .then((users) => {
+      res.status(200).send(users);
     })
     .catch(next);
 };
