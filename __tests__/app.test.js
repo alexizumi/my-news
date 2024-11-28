@@ -303,7 +303,7 @@ describe('DELETE /api/comments/:comment_id', () => {
 });
 
 describe('GET /api/users', () => {
-  test.only('200: should return all users', () => {
+  test('200: should return all users', () => {
     return request(app)
       .get('/api/users')
       .expect(200)
