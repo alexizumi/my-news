@@ -106,6 +106,17 @@ describe('GET /api/articles', () => {
         expect(body).toBeSortedBy('article_id', { ascending: true });
       });
   });
+  test('200: Response is filtered by topic', () => {
+    return request(app)
+      .get('/api/articles?topic=cats')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toHaveLength(1);
+        expect(body[0]).toHaveProperty('topic', 'cats');
+      });
+  });
+  //Still need to test for unexistent topic error handling
+
   test('400: Response error Bad request if invalid argument passed', () => {
     return request(app)
       .get('/api/articles?sort_by=banana&order=ASC')

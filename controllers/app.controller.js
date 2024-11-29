@@ -33,8 +33,8 @@ exports.getArticleById = (req, res, next) => {
     .catch(next);
 };
 exports.getArticles = (req, res, next) => {
-  const { sort_by, order } = req.query;
-  fetchAllArticles(sort_by, order)
+  const { sort_by, order, topic } = req.query;
+  fetchAllArticles(sort_by, order, topic)
     .then((articles) => {
       res.status(200).send(articles);
     })
