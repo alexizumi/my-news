@@ -142,3 +142,17 @@ exports.fetchAllUsers = () => {
     return rows;
   });
 };
+exports.fetchUserByUsername = (username) => {
+  sqlQuery = `
+  SELECT users.username, users.name , users.avatar_url 
+  FROM users
+  WHERE users.username = $1
+  `;
+  return db.query(sqlQuery, [username]).then(({ rows }) => {
+    console.log(rows, '<<< rows in model');
+    if (rows.length === 0) {
+      return Promise.reject({ status: 404, msg: 'Username not found' });
+    }
+    return rows;
+  });
+};

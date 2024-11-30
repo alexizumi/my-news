@@ -8,6 +8,7 @@ const {
   editArticle,
   removeComment,
   fetchAllUsers,
+  fetchUserByUsername,
 } = require('../models/app.model');
 
 exports.getApi = (req, res) => {
@@ -90,6 +91,15 @@ exports.getUsers = (req, res, next) => {
   fetchAllUsers()
     .then((users) => {
       res.status(200).send(users);
+    })
+    .catch(next);
+};
+exports.getUserByUsername = (req, res, next) => {
+  const { username } = req.params;
+  fetchUserByUsername(username)
+    .then(([user]) => {
+      console.log(user, '<<< user in controller');
+      res.status(200).send(user);
     })
     .catch(next);
 };
