@@ -9,6 +9,7 @@ const {
   removeComment,
   fetchAllUsers,
   fetchUserByUsername,
+  updateCommentsVotes,
 } = require('../models/app.model');
 
 exports.getApi = (req, res) => {
@@ -98,8 +99,16 @@ exports.getUserByUsername = (req, res, next) => {
   const { username } = req.params;
   fetchUserByUsername(username)
     .then(([user]) => {
-      console.log(user, '<<< user in controller');
       res.status(200).send(user);
+    })
+    .catch(next);
+};
+exports.patchCommentsVotes = (req, res, next) => {
+  const { comment_id } = req.params;
+  const { inc_votes } = req.body;
+  updateCommentsVotes(comment_id, inc_votes)
+    .then((comment) => {
+      res.status(200).send(comment);
     })
     .catch(next);
 };

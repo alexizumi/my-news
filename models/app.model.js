@@ -149,10 +149,27 @@ exports.fetchUserByUsername = (username) => {
   WHERE users.username = $1
   `;
   return db.query(sqlQuery, [username]).then(({ rows }) => {
-    console.log(rows, '<<< rows in model');
     if (rows.length === 0) {
       return Promise.reject({ status: 404, msg: 'Username not found' });
     }
     return rows;
   });
+};
+exports.updateCommentsVotes = (comment_id, inc_votes) => {
+  return db
+    .query(
+      `
+    UPDATE comments
+    SET votes = votes + $2
+    WHERE comment_id = $1
+    RETURNING *`,
+      [comment_id, inc_votes]
+    )
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({ status: 404, msg: 'Comment not found' });
+      }
+      const comment = rows[0];
+      return comment;
+    });
 };
