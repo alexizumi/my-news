@@ -364,3 +364,53 @@ describe('GET /api/users/:username', () => {
       });
   });
 });
+describe('PATCH /api/comments/:comments_id', () => {
+  test('200: should update comments vote in correct comment ID', () => {
+    const updateVote = { inc_votes: 1 };
+    return request(app)
+      .patch('/api/comments/1')
+      .send(updateVote)
+      .expect(200)
+      .then((body) => {
+        const comment = JSON.parse(body.text);
+        expect(comment).toHaveProperty('comment_id', 1);
+        expect(comment).toHaveProperty('votes', 17);
+        expect(comment).toHaveProperty('created_at', expect.any(String));
+        expect(comment).toHaveProperty('author', 'butter_bridge');
+        expect(comment).toHaveProperty(
+          'body',
+          "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
+        );
+      });
+  });
+  test('400: should respond with "Bad request" if invalid comment provided', () => {
+    const updateVote = { inc_votes: 1 };
+    return request(app)
+      .patch('/api/comments/banana')
+      .send(updateVote)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
+      });
+  });
+  test('404: should respond with "Comment not found" if article doesnt exist', () => {
+    const updateVote = { inc_votes: 1 };
+    return request(app)
+      .patch('/api/comments/1230')
+      .send(updateVote)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Comment not found');
+      });
+  });
+  test('400: should respond with "Bad request" if increment value is not a number', () => {
+    const updateVote = { inc_votes: 'one' };
+    return request(app)
+      .patch('/api/comments/3')
+      .send(updateVote)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Bad request');
+      });
+  });
+});
