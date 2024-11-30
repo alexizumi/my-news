@@ -1,50 +1,26 @@
 const express = require('express');
 const {
-  getApi,
-  getTopics,
-  getArticleById,
-  getArticles,
-  getCommentsByArticle,
-  postComment,
-  patchArticleById,
-  deleteComment,
-  getUsers,
-} = require('./controllers/app.controller');
-const {
   postgresErrorHandler,
   customErrorHandler,
   serverErrorHandler,
 } = require('./errors/app.errors');
+const apiRouter = require('./routes/api.router');
+const topicsRouter = require('./routes/topics.router');
+const articlesRouter = require('./routes/articles.router');
+const commentsRouter = require('./routes/comments.router');
+const usersRouter = require('./routes/users.router');
 
 const app = express();
 app.use(express.json());
 
-// app.listen(9090, () => {
-//   console.log('Server is running on port 9090...');
-// });
-// GET API - Document all other endpoints available
-app.get('/api', getApi);
-//GET /api/topics - List all topics
-app.get('/api/topics', getTopics);
-//GET /api/articles/:article_id - Get article by ID
-app.get('/api/articles/:article_id', getArticleById);
-//GET /api/articles - Get all articles
-app.get('/api/articles', getArticles);
-// Get comments by article
-app.get('/api/articles/:article_id/comments', getCommentsByArticle);
-// GET List all users
-app.get('/api/users', getUsers);
-// POST comment in article
-app.post('/api/articles/:article_id/comments', postComment);
-// PATCH /api/articles/:article_id - Update article votes
-app.patch('/api/articles/:article_id', patchArticleById);
-// DELETE /api/comments/:comment_id - delete comment
-app.delete('/api/comments/:comment_id', deleteComment);
+app.use('/api', apiRouter);
+app.use('/api/topics', topicsRouter);
+app.use('/api/articles', articlesRouter);
+app.use('/api/comments', commentsRouter);
+app.use('/api/users', usersRouter);
 
 app.use(postgresErrorHandler);
-
 app.use(customErrorHandler);
-
 app.use(serverErrorHandler);
 
 module.exports = app;
