@@ -355,4 +355,12 @@ describe('GET /api/users/:username', () => {
         );
       });
   });
+  test('404: should return Not found when username inexistent', () => {
+    return request(app)
+      .get('/api/users/invalid')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe('Username not found');
+      });
+  });
 });

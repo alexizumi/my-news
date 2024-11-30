@@ -96,9 +96,10 @@ exports.getUsers = (req, res, next) => {
 };
 exports.getUserByUsername = (req, res, next) => {
   const { username } = req.params;
-  console.log(username, '<<< username');
-  fetchUserByUsername(username).then(([user]) => {
-    console.log(user, '<<< user in controller');
-    res.status(200).send(user);
-  });
+  fetchUserByUsername(username)
+    .then(([user]) => {
+      console.log(user, '<<< user in controller');
+      res.status(200).send(user);
+    })
+    .catch(next);
 };
